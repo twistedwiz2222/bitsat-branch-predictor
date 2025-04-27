@@ -49,30 +49,43 @@ def get_eligible_branches(marks):
     
     return [f'{b["campus"]} - {b["branch"]}' for b in branches if marks >= b["cutoff"]]
 
+def clear_console():
+    import os
+    os.system('clear' if os.name == 'posix' else 'cls')
+
 def main():
-    print("BITSAT 2025 Rank & Branch Predictor")
+    clear_console()
+    print("\033[1mBITSAT 2025 Rank & Branch Predictor\033[0m")
     print("-----------------------------------")
 
     try:
-        score = float(input("Enter your BITSAT score: "))
-        bonus = input("Did you attempt bonus questions? (yes/no): ").strip().lower()
+        score = float(input("\nEnter your BITSAT score: "))
+        bonus = input("\nDid you attempt bonus questions? (yes/no): ").strip().lower()
 
         bonus_questions = bonus == "yes"
         predicted_rank = predict_bitsat_rank(score, bonus_questions)
         
-        print(f"\nYour predicted BITSAT rank is approximately: {predicted_rank}")
+        clear_console()
+        print("\033[1mResults:\033[0m")
+        print("-----------------------------------")
+        print(f"\nPredicted BITSAT rank: {predicted_rank}")
         
         # Branch prediction
         eligible_branches = get_eligible_branches(int(score))
         if eligible_branches:
-            print("\n✅ Based on 2024 cutoffs, you may be eligible for:")
+            print("\n\033[1m✅ Eligible branches (2024 cutoffs):\033[0m")
             for branch in eligible_branches:
-                print(branch)
+                print(f"• {branch}")
         else:
-            print("\n❌ Score below 2024 cutoffs for direct admission")
+            print("\n\033[1m❌ Score below 2024 cutoffs for direct admission\033[0m")
+        
+        input("\nPress Enter to try again...")
+        main()
 
     except ValueError:
-        print("Invalid input. Please enter numeric values for score.")
+        print("\nInvalid input. Please enter numeric values for score.")
+        input("\nPress Enter to try again...")
+        main()
 
 if __name__ == "__main__":
     main()
