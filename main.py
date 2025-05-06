@@ -1,8 +1,8 @@
+from flask import Flask, render_template, jsonify, request
+
+app = Flask(__name__)
 
 def predict_bitsat_rank(score, bonus_questions=False):
-    """
-    Predicts the BITSAT rank based on score.
-    """
     if bonus_questions:
         if score > 390:
             rank = 48.33 - (0.1111 * score)
@@ -20,9 +20,6 @@ def predict_bitsat_rank(score, bonus_questions=False):
     return max(1, int(rank))
 
 def get_eligible_branches(marks):
-    """
-    Returns list of eligible branches based on BITSAT marks
-    """
     branches = [
         {"campus": "Pilani", "branch": "CSE", "cutoff": 327},
         {"campus": "Pilani", "branch": "ECE", "cutoff": 314},
@@ -46,46 +43,30 @@ def get_eligible_branches(marks):
         {"campus": "Hyderabad", "branch": "Civil", "cutoff": 235},
         {"campus": "Hyderabad", "branch": "Mathematics & Computing", "cutoff": 293},
     ]
-    
-    return [f'{b["campus"]} - {b["branch"]}' for b in branches if marks >= b["cutoff"]]
 
-def clear_console():
-    import os
-    os.system('clear' if os.name == 'posix' else 'cls')
+    eligible = []
+    for b in branches:
+        if marks >= b["cutoff"]:
+            eligible.append(b)
+    return eligible
 
-def main():
-    clear_console()
-    print("\033[1mBITSAT 2025 Rank & Branch Predictor\033[0m")
-    print("-----------------------------------")
+@app.route('/')
+def home():
+    return render_template('index.html')
 
-    try:
-        score = float(input("\nEnter your BITSAT score: "))
-        bonus = input("\nDid you attempt bonus questions? (yes/no): ").strip().lower()
+@app.route('/predict', methods=['POST'])
+def predict():
+    data = request.get_json()
+    score = float(data['score'])
+    bonus = data['bonus'] == 'true'
 
-        bonus_questions = bonus == "yes"
-        predicted_rank = predict_bitsat_rank(score, bonus_questions)
-        
-        clear_console()
-        print("\033[1mResults:\033[0m")
-        print("-----------------------------------")
-        print(f"\nPredicted BITSAT rank: {predicted_rank}")
-        
-        # Branch prediction
-        eligible_branches = get_eligible_branches(int(score))
-        if eligible_branches:
-            print("\n\033[1m✅ Eligible branches (2024 cutoffs):\033[0m")
-            for branch in eligible_branches:
-                print(f"• {branch}")
-        else:
-            print("\n\033[1m❌ Score below 2024 cutoffs for direct admission\033[0m")
-        
-        input("\nPress Enter to try again...")
-        main()
+    rank = predict_bitsat_rank(score, bonus)
+    branches = get_eligible_branches(int(score))
 
-    except ValueError:
-        print("\nInvalid input. Please enter numeric values for score.")
-        input("\nPress Enter to try again...")
-        main()
+    return jsonify({
+        'rank': rank,
+        'branches': branches
+    })
 
-if __name__ == "__main__":
-    main()
+if __name__ == '__main__':
+    app.run(host='0.0.0.0', port=5000)
