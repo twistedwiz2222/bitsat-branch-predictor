@@ -9,8 +9,14 @@
     <style>
         body {
             background: #1a1a2e;
-            color: #fff;
+            color: #ffffff;
             font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+            font-size: 16px;
+        }
+        label, .form-check-label {
+            color: #ffffff;
+            font-weight: 500;
+            font-size: 1.1em;
         }
         .container {
             max-width: 1200px;
@@ -170,6 +176,17 @@
             const campusList = document.getElementById('campusList');
             campusList.innerHTML = '';
             
+            if (data.branches.length === 0) {
+                campusList.innerHTML = `
+                    <div class="col-12">
+                        <div class="alert" style="background: #331427; color: #ffa5b8; border: 1px solid #e94560; border-radius: 15px; padding: 20px;">
+                            <h5 class="text-center mb-0">😔 Based on your score, no seats are currently available. Keep working hard - there's always room for improvement! 💪</h5>
+                        </div>
+                    </div>
+                `;
+                return;
+            }
+
             const campusGroups = data.branches.reduce((groups, branch) => {
                 if (!groups[branch.campus]) {
                     groups[branch.campus] = [];
