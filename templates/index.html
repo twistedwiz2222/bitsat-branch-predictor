@@ -7,36 +7,116 @@
     <title>BITSAT 2025 Predictor</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <style>
+        body {
+            background: #1a1a2e;
+            color: #fff;
+            font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+        }
+        .container {
+            max-width: 1200px;
+        }
+        .card {
+            background: #16213e;
+            border: none;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+            border-radius: 15px;
+        }
+        .card-header {
+            border-bottom: 1px solid #2a2a4a;
+            background: #0f3460;
+            border-radius: 15px 15px 0 0 !important;
+        }
+        .btn-primary {
+            background: #e94560;
+            border: none;
+            padding: 12px;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            transition: transform 0.2s;
+        }
+        .btn-primary:hover {
+            background: #e94560;
+            transform: translateY(-2px);
+        }
+        .form-control {
+            background: #1f1f3d;
+            border: 1px solid #2a2a4a;
+            color: #fff;
+            padding: 12px;
+        }
+        .form-control:focus {
+            background: #1f1f3d;
+            border-color: #e94560;
+            color: #fff;
+            box-shadow: 0 0 0 0.25rem rgba(233, 69, 96, 0.25);
+        }
+        .form-check-input:checked {
+            background-color: #e94560;
+            border-color: #e94560;
+        }
+        .alert-info {
+            background: #0f3460;
+            border: none;
+            color: #fff;
+        }
         .campus-card {
             margin-bottom: 20px;
+            transition: transform 0.2s;
+        }
+        .campus-card:hover {
+            transform: translateY(-5px);
         }
         .branch-list {
             list-style: none;
             padding-left: 0;
         }
         .branch-item {
-            padding: 8px 0;
-            border-bottom: 1px solid #eee;
+            padding: 12px;
+            border-bottom: 1px solid #2a2a4a;
+            transition: background 0.2s;
+        }
+        .branch-item:hover {
+            background: #1f1f3d;
         }
         .branch-item:last-child {
             border-bottom: none;
+        }
+        h1 {
+            color: #e94560;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            margin-bottom: 2rem;
+        }
+        .text-muted {
+            color: #8a8aa3 !important;
+        }
+        #results {
+            opacity: 0;
+            transform: translateY(20px);
+            transition: all 0.5s;
+        }
+        #results.show {
+            opacity: 1;
+            transform: translateY(0);
         }
     </style>
 </head>
 <body>
     <div class="container py-5">
-        <h1 class="text-center mb-4">BITSAT 2025 Rank & Branch Predictor</h1>
+        <h1 class="text-center mb-4">🚀 BITSAT 2025 Predictor</h1>
         
         <div class="row justify-content-center">
             <div class="col-md-6">
                 <div class="card">
-                    <div class="card-body">
+                    <div class="card-body p-4">
                         <form id="predictForm">
-                            <div class="mb-3">
+                            <div class="mb-4">
                                 <label for="score" class="form-label">Enter your BITSAT score:</label>
                                 <input type="number" class="form-control" id="score" required min="0" max="400">
                             </div>
-                            <div class="mb-3">
+                            <div class="mb-4">
                                 <div class="form-check">
                                     <input class="form-check-input" type="checkbox" id="bonus">
                                     <label class="form-check-label" for="bonus">
@@ -44,25 +124,25 @@
                                     </label>
                                 </div>
                             </div>
-                            <button type="submit" class="btn btn-primary w-100">Predict</button>
+                            <button type="submit" class="btn btn-primary w-100">Predict My Future! 🎯</button>
                         </form>
                     </div>
                 </div>
             </div>
         </div>
 
-        <div id="results" class="mt-4" style="display: none;">
-            <h3 class="text-center mb-4">Your Results</h3>
+        <div id="results" class="mt-5" style="display: none;">
+            <h3 class="text-center mb-4">Your Results 🎉</h3>
             <div class="row justify-content-center">
                 <div class="col-md-6">
                     <div class="alert alert-info">
-                        <h4 class="text-center">Predicted Rank: <span id="predictedRank"></span></h4>
+                        <h4 class="text-center mb-0">Predicted Rank: <span id="predictedRank" style="color: #e94560; font-weight: bold;"></span></h4>
                     </div>
                 </div>
             </div>
             
             <div class="mt-4">
-                <h4 class="text-center mb-4">Eligible Branches</h4>
+                <h4 class="text-center mb-4">Your Eligible Branches 📚</h4>
                 <div class="row" id="campusList"></div>
             </div>
         </div>
@@ -90,7 +170,6 @@
             const campusList = document.getElementById('campusList');
             campusList.innerHTML = '';
             
-            // Group branches by campus
             const campusGroups = data.branches.reduce((groups, branch) => {
                 if (!groups[branch.campus]) {
                     groups[branch.campus] = [];
@@ -99,14 +178,13 @@
                 return groups;
             }, {});
             
-            // Create cards for each campus
             for (const [campus, branches] of Object.entries(campusGroups)) {
                 const col = document.createElement('div');
                 col.className = 'col-md-4';
                 col.innerHTML = `
                     <div class="card campus-card">
-                        <div class="card-header bg-primary text-white">
-                            <h5 class="mb-0">${campus} Campus</h5>
+                        <div class="card-header">
+                            <h5 class="mb-0">${campus} Campus 🏛️</h5>
                         </div>
                         <div class="card-body">
                             <ul class="branch-list">
@@ -124,7 +202,11 @@
                 campusList.appendChild(col);
             }
             
-            document.getElementById('results').style.display = 'block';
+            const results = document.getElementById('results');
+            results.style.display = 'block';
+            // Force reflow
+            results.offsetHeight;
+            results.classList.add('show');
         });
     </script>
 </body>
