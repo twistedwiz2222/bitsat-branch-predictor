@@ -61,10 +61,19 @@
         
         <div class="card mb-4">
             <div class="card-header">
-                Rank Calculation Formula
+                Mathematical Approach
             </div>
             <div class="card-body">
-                <p>Our rank prediction uses a piecewise linear regression model based on historical data:</p>
+                <p>Our prediction model uses a piecewise linear regression approach based on historical BITSAT data analysis. The relationship between scores and ranks follows distinct patterns at different score ranges, which we've modeled using multiple linear functions.</p>
+
+                <div class="my-4">
+                    <canvas id="rankGraph" style="width: 100%; height: 300px; background: #1f1f3d; border-radius: 8px; padding: 10px;"></canvas>
+                </div>
+
+                <p>The graph above shows the relationship between BITSAT scores and ranks. The piecewise nature of our model allows us to accurately predict ranks across different score ranges.</p>
+
+                <h5 class="mt-4">Rank Calculation Formula</h5>
+                <p>Our rank prediction uses the following piecewise linear regression model:</p>
                 
                 <p><strong>With Bonus Questions:</strong></p>
                 <div class="formula">
@@ -116,5 +125,80 @@
             </div>
         </div>
     </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script>
+        const ctx = document.getElementById('rankGraph').getContext('2d');
+        
+        // Generate data points
+        const generatePoints = () => {
+            const points = [];
+            for(let score = 0; score <= 400; score += 5) {
+                let rank;
+                if(score > 390) {
+                    rank = 48.33 - (0.1111 * score);
+                } else if(score >= 307) {
+                    rank = 9772 - (27.23 * score);
+                } else {
+                    rank = 54747 - (173.73 * score);
+                }
+                points.push({x: score, y: Math.max(1, rank)});
+            }
+            return points;
+        };
+
+        new Chart(ctx, {
+            type: 'line',
+            data: {
+                datasets: [{
+                    label: 'Score vs Rank',
+                    data: generatePoints(),
+                    borderColor: '#e94560',
+                    borderWidth: 2,
+                    pointRadius: 0,
+                    fill: false
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                scales: {
+                    x: {
+                        type: 'linear',
+                        title: {
+                            display: true,
+                            text: 'BITSAT Score',
+                            color: '#ffffff'
+                        },
+                        grid: {
+                            color: 'rgba(255, 255, 255, 0.1)'
+                        },
+                        ticks: {
+                            color: '#ffffff'
+                        }
+                    },
+                    y: {
+                        type: 'linear',
+                        title: {
+                            display: true,
+                            text: 'Predicted Rank',
+                            color: '#ffffff'
+                        },
+                        grid: {
+                            color: 'rgba(255, 255, 255, 0.1)'
+                        },
+                        ticks: {
+                            color: '#ffffff'
+                        }
+                    }
+                },
+                plugins: {
+                    legend: {
+                        display: false
+                    }
+                }
+            }
+        });
+    </script>
 </body>
 </html>
