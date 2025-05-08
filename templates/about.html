@@ -53,9 +53,9 @@
             color: #e94560;
             text-decoration: none;
             font-weight: 600;
-            font-size: 1.2em;
+            font-size: 1.1em;
             transition: all 0.3s ease;
-            padding: 8px 22px;
+            padding: 4px 18px;
             border-radius: 5px;
             display: inline-block;
         }
@@ -74,7 +74,7 @@
         .chart-container {
             position: relative;
             margin: auto;
-            height: 500px;
+            height: 600px;
             width: 100%;
             padding: 10px;
         }
@@ -92,8 +92,9 @@
             left: 0;
             right: 0;
             z-index: 1000;
-            padding: 8px 0;
+            padding: 4px 0;
             box-shadow: 0 2px 10px rgba(0,0,0,0.2);
+            height: 36px;
         }
     </style>
 </head>
@@ -150,62 +151,282 @@
 
     <script>
         document.addEventListener('DOMContentLoaded', function() {
+            // Get the chart canvas
             const ctx = document.getElementById('cutoffChart').getContext('2d');
             
-            // X-axis scores range - from 200 to 330
-            const scoreRange = Array.from({length: 14}, (_, i) => 200 + (i * 10));
+            // Data for top programs across all campuses
+            const campusData = {
+                // Top branches for each campus
+                pilani: {
+                    branches: ['Computer Science', 'Math & Computing', 'ECE', 'EEE', 'EIE', 'Mechanical'],
+                    cutoffs: [327, 318, 315, 298, 288, 272]
+                },
+                goa: {
+                    branches: ['Computer Science', 'Math & Computing', 'ECE', 'EEE', 'EIE', 'Mechanical'],
+                    cutoffs: [300, 292, 285, 275, 265, 260]
+                },
+                hyderabad: {
+                    branches: ['Computer Science', 'Math & Computing', 'ECE', 'EEE', 'EIE', 'Mechanical'],
+                    cutoffs: [298, 290, 285, 270, 260, 258]
+                }
+            };
             
-            // 2024 cutoffs for top programs
-            const pilaniCS = 327;
-            const pilaniMathComp = 318;
-            const pilaniECE = 315;
-            const goaCS = 300;
-            const goaMathComp = 292;
-            const hyderabadCS = 298;
+            // Create radar chart to show cutoff comparisons across campuses
+            const radarChart = new Chart(
+                document.createElement('canvas'),
+                {
+                    type: 'radar',
+                    data: {
+                        labels: campusData.pilani.branches,
+                        datasets: [
+                            {
+                                label: 'Pilani Campus',
+                                data: campusData.pilani.cutoffs,
+                                backgroundColor: 'rgba(233, 69, 96, 0.2)',
+                                borderColor: 'rgba(233, 69, 96, 1)',
+                                pointBackgroundColor: 'rgba(233, 69, 96, 1)',
+                                pointBorderColor: '#fff',
+                                pointHoverBackgroundColor: '#fff',
+                                pointHoverBorderColor: 'rgba(233, 69, 96, 1)',
+                                borderWidth: 2
+                            },
+                            {
+                                label: 'Goa Campus',
+                                data: campusData.goa.cutoffs,
+                                backgroundColor: 'rgba(71, 125, 241, 0.2)',
+                                borderColor: 'rgba(71, 125, 241, 1)',
+                                pointBackgroundColor: 'rgba(71, 125, 241, 1)',
+                                pointBorderColor: '#fff',
+                                pointHoverBackgroundColor: '#fff',
+                                pointHoverBorderColor: 'rgba(71, 125, 241, 1)',
+                                borderWidth: 2
+                            },
+                            {
+                                label: 'Hyderabad Campus',
+                                data: campusData.hyderabad.cutoffs,
+                                backgroundColor: 'rgba(45, 211, 111, 0.2)',
+                                borderColor: 'rgba(45, 211, 111, 1)',
+                                pointBackgroundColor: 'rgba(45, 211, 111, 1)',
+                                pointBorderColor: '#fff',
+                                pointHoverBackgroundColor: '#fff',
+                                pointHoverBorderColor: 'rgba(45, 211, 111, 1)',
+                                borderWidth: 2
+                            }
+                        ]
+                    },
+                    options: {
+                        responsive: true,
+                        maintainAspectRatio: false,
+                        scales: {
+                            r: {
+                                beginAtZero: false,
+                                min: 240,
+                                max: 350,
+                                ticks: {
+                                    color: 'rgba(255, 255, 255, 0.7)',
+                                    backdropColor: 'rgba(0, 0, 0, 0)',
+                                    showLabelBackdrop: false,
+                                    font: {
+                                        size: 10
+                                    }
+                                },
+                                angleLines: {
+                                    color: 'rgba(255, 255, 255, 0.1)'
+                                },
+                                grid: {
+                                    color: 'rgba(255, 255, 255, 0.1)'
+                                },
+                                pointLabels: {
+                                    color: 'rgba(255, 255, 255, 0.8)',
+                                    font: {
+                                        size: 12,
+                                        weight: 'bold'
+                                    }
+                                }
+                            }
+                        },
+                        plugins: {
+                            title: {
+                                display: true,
+                                text: 'Cutoff Comparison Across Campuses',
+                                color: 'rgba(255, 255, 255, 0.9)',
+                                font: {
+                                    size: 16,
+                                    weight: 'bold'
+                                },
+                                padding: {
+                                    top: 10,
+                                    bottom: 20
+                                }
+                            },
+                            legend: {
+                                display: true,
+                                position: 'top',
+                                labels: {
+                                    color: 'rgba(255, 255, 255, 0.8)',
+                                    padding: 20,
+                                    font: {
+                                        size: 12
+                                    },
+                                    usePointStyle: true,
+                                    pointStyle: 'circle'
+                                }
+                            },
+                            tooltip: {
+                                backgroundColor: 'rgba(15, 52, 96, 0.95)',
+                                titleColor: '#fff',
+                                bodyColor: '#fff',
+                                titleFont: {
+                                    size: 14,
+                                    weight: 'bold'
+                                },
+                                bodyFont: {
+                                    size: 13
+                                },
+                                padding: 12,
+                                cornerRadius: 8,
+                                displayColors: true,
+                                callbacks: {
+                                    label: function(context) {
+                                        return `${context.dataset.label}: ${context.raw}`;
+                                    }
+                                }
+                            }
+                        },
+                        elements: {
+                            line: {
+                                tension: 0.1
+                            }
+                        }
+                    }
+                }
+            );
             
-            // Create data points for line graph
-            // Each line will show which programs are available at each score
-            const data = scoreRange.map(score => {
-                return {
-                    x: score,
-                    pilaniCS: score >= pilaniCS ? 1 : null,
-                    pilaniMathComp: score >= pilaniMathComp ? 1 : null,
-                    pilaniECE: score >= pilaniECE ? 1 : null,
-                    goaCS: score >= goaCS ? 1 : null,
-                    goaMathComp: score >= goaMathComp ? 1 : null,
-                    hyderabadCS: score >= hyderabadCS ? 1 : null
-                };
-            });
-            
-            const chart = new Chart(ctx, {
-                type: 'bar',
-                data: {
-                    labels: ['CS (Pilani)', 'Math & Computing (Pilani)', 'ECE (Pilani)', 'CS (Goa)', 'Math & Computing (Goa)', 'CS (Hyderabad)'],
-                    datasets: [
-                        {
-                            label: '2024 Cutoffs',
-                            data: [pilaniCS, pilaniMathComp, pilaniECE, goaCS, goaMathComp, hyderabadCS],
+            // Prepare data for doughnut chart comparison between campuses for CS branch
+            const csComparisonChart = new Chart(
+                document.createElement('canvas'),
+                {
+                    type: 'doughnut',
+                    data: {
+                        labels: ['Pilani CS', 'Goa CS', 'Hyderabad CS'],
+                        datasets: [{
+                            data: [327, 300, 298],
                             backgroundColor: [
-                                'rgba(233, 69, 96, 0.8)', 
-                                'rgba(71, 125, 241, 0.8)', 
-                                'rgba(118, 74, 241, 0.8)', 
-                                'rgba(45, 211, 111, 0.8)', 
-                                'rgba(240, 152, 25, 0.8)', 
-                                'rgba(26, 188, 254, 0.8)'
+                                'rgba(233, 69, 96, 0.8)',
+                                'rgba(71, 125, 241, 0.8)',
+                                'rgba(45, 211, 111, 0.8)'
                             ],
                             borderColor: [
                                 'rgba(233, 69, 96, 1)',
                                 'rgba(71, 125, 241, 1)',
-                                'rgba(118, 74, 241, 1)',
-                                'rgba(45, 211, 111, 1)',
-                                'rgba(240, 152, 25, 1)',
-                                'rgba(26, 188, 254, 1)'
+                                'rgba(45, 211, 111, 1)'
+                            ],
+                            borderWidth: 2,
+                            hoverOffset: 15
+                        }]
+                    },
+                    options: {
+                        responsive: true,
+                        maintainAspectRatio: false,
+                        cutout: '65%',
+                        plugins: {
+                            title: {
+                                display: true,
+                                text: 'Computer Science Cutoffs by Campus',
+                                color: 'rgba(255, 255, 255, 0.9)',
+                                font: {
+                                    size: 16,
+                                    weight: 'bold'
+                                },
+                                padding: {
+                                    top: 10,
+                                    bottom: 20
+                                }
+                            },
+                            legend: {
+                                position: 'bottom',
+                                labels: {
+                                    color: 'rgba(255, 255, 255, 0.8)',
+                                    padding: 20,
+                                    font: {
+                                        size: 12
+                                    },
+                                    usePointStyle: true,
+                                    pointStyle: 'circle'
+                                }
+                            },
+                            tooltip: {
+                                backgroundColor: 'rgba(15, 52, 96, 0.95)',
+                                titleColor: '#fff',
+                                bodyColor: '#fff',
+                                titleFont: {
+                                    size: 14,
+                                    weight: 'bold'
+                                },
+                                bodyFont: {
+                                    size: 13
+                                },
+                                padding: 12,
+                                cornerRadius: 8,
+                                displayColors: true,
+                                callbacks: {
+                                    label: function(context) {
+                                        return `Cutoff: ${context.raw}`;
+                                    }
+                                }
+                            }
+                        },
+                        elements: {
+                            arc: {
+                                borderWidth: 1
+                            }
+                        },
+                        animation: {
+                            animateRotate: true,
+                            animateScale: true,
+                            duration: 1000,
+                            easing: 'easeOutQuart'
+                        }
+                    }
+                }
+            );
+            
+            // Combined chart - Horizontal bar chart for all top programs
+            const chart = new Chart(ctx, {
+                type: 'bar',
+                data: {
+                    labels: [
+                        'CS (Pilani)', 'Math & Computing (Pilani)', 'ECE (Pilani)', 
+                        'CS (Goa)', 'Math & Computing (Goa)', 'ECE (Goa)',
+                        'CS (Hyderabad)', 'Math & Computing (Hyderabad)', 'ECE (Hyderabad)',
+                        'EEE (Pilani)', 'EEE (Goa)', 'EEE (Hyderabad)'
+                    ],
+                    datasets: [
+                        {
+                            label: '2024 Cutoffs',
+                            data: [
+                                327, 318, 315, 
+                                300, 292, 285,
+                                298, 290, 285,
+                                298, 275, 270
+                            ],
+                            backgroundColor: [
+                                'rgba(233, 69, 96, 0.8)', 'rgba(233, 69, 96, 0.6)', 'rgba(233, 69, 96, 0.4)',
+                                'rgba(71, 125, 241, 0.8)', 'rgba(71, 125, 241, 0.6)', 'rgba(71, 125, 241, 0.4)', 
+                                'rgba(45, 211, 111, 0.8)', 'rgba(45, 211, 111, 0.6)', 'rgba(45, 211, 111, 0.4)',
+                                'rgba(240, 152, 25, 0.8)', 'rgba(240, 152, 25, 0.6)', 'rgba(240, 152, 25, 0.4)'
+                            ],
+                            borderColor: [
+                                'rgba(233, 69, 96, 1)', 'rgba(233, 69, 96, 1)', 'rgba(233, 69, 96, 1)',
+                                'rgba(71, 125, 241, 1)', 'rgba(71, 125, 241, 1)', 'rgba(71, 125, 241, 1)',
+                                'rgba(45, 211, 111, 1)', 'rgba(45, 211, 111, 1)', 'rgba(45, 211, 111, 1)',
+                                'rgba(240, 152, 25, 1)', 'rgba(240, 152, 25, 1)', 'rgba(240, 152, 25, 1)'
                             ],
                             borderWidth: 1,
                             borderRadius: 8,
                             barThickness: 'flex',
                             minBarLength: 10,
-                            maxBarThickness: 50
+                            maxBarThickness: 35
                         }
                     ]
                 },
@@ -214,6 +435,28 @@
                     maintainAspectRatio: false,
                     scales: {
                         y: {
+                            title: {
+                                display: true,
+                                text: 'Branch',
+                                color: 'rgba(255, 255, 255, 0.8)',
+                                font: {
+                                    weight: 'bold'
+                                }
+                            },
+                            grid: {
+                                color: 'rgba(255, 255, 255, 0.05)',
+                                drawBorder: false,
+                                display: false
+                            },
+                            ticks: {
+                                color: 'rgba(255, 255, 255, 0.7)',
+                                padding: 8,
+                                font: {
+                                    size: 11
+                                }
+                            }
+                        },
+                        x: {
                             title: {
                                 display: true,
                                 text: 'Cutoff Score',
@@ -226,44 +469,19 @@
                             min: 240,
                             max: 350,
                             grid: {
-                                color: 'rgba(255, 255, 255, 0.1)',
+                                color: 'rgba(255, 255, 255, 0.05)',
                                 drawBorder: false
                             },
                             ticks: {
                                 color: 'rgba(255, 255, 255, 0.7)',
                                 padding: 8
                             }
-                        },
-                        x: {
-                            title: {
-                                display: true,
-                                text: 'Branch',
-                                color: 'rgba(255, 255, 255, 0.8)',
-                                font: {
-                                    weight: 'bold'
-                                }
-                            },
-                            grid: {
-                                color: 'rgba(255, 255, 255, 0.1)',
-                                drawBorder: false,
-                                display: false
-                            },
-                            ticks: {
-                                color: 'rgba(255, 255, 255, 0.7)',
-                                padding: 8,
-                                maxRotation: 45,
-                                minRotation: 45,
-                                autoSkip: false,
-                                font: {
-                                    size: 11
-                                }
-                            }
                         }
                     },
                     plugins: {
                         title: {
                             display: true,
-                            text: '2024 BITSAT Cutoff Scores',
+                            text: 'BITSAT 2024 Cutoff Scores - All Campuses',
                             color: 'rgba(255, 255, 255, 0.9)',
                             font: {
                                 size: 16,
@@ -294,21 +512,21 @@
                             callbacks: {
                                 label: function(context) {
                                     return `Cutoff: ${context.raw}`;
-                                },
-                                title: function(tooltipItems) {
-                                    return tooltipItems[0].label;
                                 }
                             }
                         },
                         datalabels: {
+                            display: true,
                             color: '#fff',
                             anchor: 'end',
-                            align: 'top',
+                            align: 'end',
+                            offset: 8,
                             formatter: function(value) {
                                 return value;
                             },
                             font: {
-                                weight: 'bold'
+                                weight: 'bold',
+                                size: 10
                             }
                         }
                     },
@@ -319,7 +537,7 @@
                     layout: {
                         padding: {
                             top: 20,
-                            right: 20,
+                            right: 40,
                             bottom: 20,
                             left: 20
                         }
