@@ -43,20 +43,21 @@
             color: #e94560;
             font-weight: 700;
             text-transform: uppercase;
-            letter-spacing: 2px;
-            margin-bottom: 2rem;
+            letter-spacing: 1px;
+            margin-bottom: 1.5rem;
             text-align: center;
-            font-size: 2rem;
+            font-size: 1.6rem;
             padding: 0 15px;
         }
         .nav-home {
             color: #e94560;
             text-decoration: none;
             font-weight: 600;
-            font-size: 1em;
+            font-size: 1.2em;
             transition: all 0.3s ease;
-            padding: 5px 15px;
+            padding: 8px 22px;
             border-radius: 5px;
+            display: inline-block;
         }
         .nav-home:hover {
             color: #fff;
@@ -73,7 +74,7 @@
         .chart-container {
             position: relative;
             margin: auto;
-            height: 380px;
+            height: 500px;
             width: 100%;
             padding: 10px;
         }
@@ -177,81 +178,34 @@
             });
             
             const chart = new Chart(ctx, {
-                type: 'line',
+                type: 'bar',
                 data: {
-                    labels: scoreRange,
+                    labels: ['CS (Pilani)', 'Math & Computing (Pilani)', 'ECE (Pilani)', 'CS (Goa)', 'Math & Computing (Goa)', 'CS (Hyderabad)'],
                     datasets: [
                         {
-                            label: 'CS (Pilani) - 327',
-                            data: scoreRange.map(score => score >= pilaniCS ? pilaniCS : null),
-                            borderColor: 'rgba(233, 69, 96, 1)',
-                            backgroundColor: 'rgba(233, 69, 96, 0.2)',
-                            borderWidth: 3,
-                            tension: 0.3,
-                            pointRadius: 4,
-                            pointHoverRadius: 6,
-                            pointBackgroundColor: '#fff',
-                            fill: false
-                        },
-                        {
-                            label: 'Math & Computing (Pilani) - 318',
-                            data: scoreRange.map(score => score >= pilaniMathComp ? pilaniMathComp : null),
-                            borderColor: 'rgba(71, 125, 241, 1)',
-                            backgroundColor: 'rgba(71, 125, 241, 0.2)',
-                            borderWidth: 3,
-                            tension: 0.3,
-                            pointRadius: 4,
-                            pointHoverRadius: 6,
-                            pointBackgroundColor: '#fff',
-                            fill: false
-                        },
-                        {
-                            label: 'ECE (Pilani) - 315',
-                            data: scoreRange.map(score => score >= pilaniECE ? pilaniECE : null),
-                            borderColor: 'rgba(118, 74, 241, 1)',
-                            backgroundColor: 'rgba(118, 74, 241, 0.2)',
-                            borderWidth: 3,
-                            tension: 0.3,
-                            pointRadius: 4,
-                            pointHoverRadius: 6,
-                            pointBackgroundColor: '#fff',
-                            fill: false
-                        },
-                        {
-                            label: 'CS (Goa) - 300',
-                            data: scoreRange.map(score => score >= goaCS ? goaCS : null),
-                            borderColor: 'rgba(45, 211, 111, 1)',
-                            backgroundColor: 'rgba(45, 211, 111, 0.2)',
-                            borderWidth: 3,
-                            tension: 0.3,
-                            pointRadius: 4,
-                            pointHoverRadius: 6,
-                            pointBackgroundColor: '#fff',
-                            fill: false
-                        },
-                        {
-                            label: 'Math & Computing (Goa) - 292',
-                            data: scoreRange.map(score => score >= goaMathComp ? goaMathComp : null),
-                            borderColor: 'rgba(240, 152, 25, 1)',
-                            backgroundColor: 'rgba(240, 152, 25, 0.2)',
-                            borderWidth: 3,
-                            tension: 0.3,
-                            pointRadius: 4,
-                            pointHoverRadius: 6,
-                            pointBackgroundColor: '#fff',
-                            fill: false
-                        },
-                        {
-                            label: 'CS (Hyderabad) - 298',
-                            data: scoreRange.map(score => score >= hyderabadCS ? hyderabadCS : null),
-                            borderColor: 'rgba(26, 188, 254, 1)',
-                            backgroundColor: 'rgba(26, 188, 254, 0.2)',
-                            borderWidth: 3,
-                            tension: 0.3,
-                            pointRadius: 4,
-                            pointHoverRadius: 6,
-                            pointBackgroundColor: '#fff',
-                            fill: false
+                            label: '2024 Cutoffs',
+                            data: [pilaniCS, pilaniMathComp, pilaniECE, goaCS, goaMathComp, hyderabadCS],
+                            backgroundColor: [
+                                'rgba(233, 69, 96, 0.8)', 
+                                'rgba(71, 125, 241, 0.8)', 
+                                'rgba(118, 74, 241, 0.8)', 
+                                'rgba(45, 211, 111, 0.8)', 
+                                'rgba(240, 152, 25, 0.8)', 
+                                'rgba(26, 188, 254, 0.8)'
+                            ],
+                            borderColor: [
+                                'rgba(233, 69, 96, 1)',
+                                'rgba(71, 125, 241, 1)',
+                                'rgba(118, 74, 241, 1)',
+                                'rgba(45, 211, 111, 1)',
+                                'rgba(240, 152, 25, 1)',
+                                'rgba(26, 188, 254, 1)'
+                            ],
+                            borderWidth: 1,
+                            borderRadius: 8,
+                            barThickness: 'flex',
+                            minBarLength: 10,
+                            maxBarThickness: 50
                         }
                     ]
                 },
@@ -269,7 +223,7 @@
                                 }
                             },
                             beginAtZero: false,
-                            min: 200,
+                            min: 240,
                             max: 350,
                             grid: {
                                 color: 'rgba(255, 255, 255, 0.1)',
@@ -283,7 +237,7 @@
                         x: {
                             title: {
                                 display: true,
-                                text: 'BITSAT Score',
+                                text: 'Branch',
                                 color: 'rgba(255, 255, 255, 0.8)',
                                 font: {
                                     weight: 'bold'
@@ -296,7 +250,13 @@
                             },
                             ticks: {
                                 color: 'rgba(255, 255, 255, 0.7)',
-                                padding: 8
+                                padding: 8,
+                                maxRotation: 45,
+                                minRotation: 45,
+                                autoSkip: false,
+                                font: {
+                                    size: 11
+                                }
                             }
                         }
                     },
@@ -315,19 +275,7 @@
                             }
                         },
                         legend: {
-                            position: 'bottom',
-                            align: 'center',
-                            labels: {
-                                boxWidth: 12,
-                                usePointStyle: true,
-                                pointStyle: 'circle',
-                                color: 'rgba(255, 255, 255, 0.8)',
-                                font: {
-                                    size: 11,
-                                    weight: 'bold'
-                                },
-                                padding: 15
-                            }
+                            display: false
                         },
                         tooltip: {
                             backgroundColor: 'rgba(15, 52, 96, 0.95)',
@@ -342,11 +290,25 @@
                             },
                             padding: 12,
                             cornerRadius: 8,
-                            displayColors: false,
+                            displayColors: true,
                             callbacks: {
                                 label: function(context) {
                                     return `Cutoff: ${context.raw}`;
+                                },
+                                title: function(tooltipItems) {
+                                    return tooltipItems[0].label;
                                 }
+                            }
+                        },
+                        datalabels: {
+                            color: '#fff',
+                            anchor: 'end',
+                            align: 'top',
+                            formatter: function(value) {
+                                return value;
+                            },
+                            font: {
+                                weight: 'bold'
                             }
                         }
                     },
@@ -356,12 +318,15 @@
                     },
                     layout: {
                         padding: {
-                            top: 5,
-                            right: 16,
-                            bottom: 5,
-                            left: 16
+                            top: 20,
+                            right: 20,
+                            bottom: 20,
+                            left: 20
                         }
-                    }
+                    },
+                    indexAxis: 'y',
+                    barPercentage: 0.8,
+                    categoryPercentage: 0.9
                 }
             });
         });
