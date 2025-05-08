@@ -15,7 +15,7 @@
         }
         .container {
             max-width: 1000px;
-            padding-top: 100px;
+            padding-top: 70px;
         }
         .card {
             background: #16213e;
@@ -30,6 +30,14 @@
             border-radius: 15px 15px 0 0 !important;
             color: #ffffff;
             font-weight: 600;
+            padding: 12px 20px;
+            font-size: 1.1rem;
+        }
+        .card-body {
+            padding: 20px;
+            color: #e6e6fa;
+            font-size: 1rem;
+            line-height: 1.6;
         }
         h1 {
             color: #e94560;
@@ -38,6 +46,8 @@
             letter-spacing: 2px;
             margin-bottom: 2rem;
             text-align: center;
+            font-size: 2rem;
+            padding: 0 15px;
         }
         .nav-home {
             color: #e94560;
@@ -66,6 +76,13 @@
             height: 400px;
             width: 100%;
             padding: 20px;
+        }
+        ul {
+            margin-left: 20px;
+            margin-bottom: 15px;
+        }
+        li {
+            margin-bottom: 8px;
         }
     </style>
 </head>
@@ -96,10 +113,10 @@
 
         <div class="card mb-4">
             <div class="card-header">
-                2025 Cutoff Projections
+                2024 Cutoff Data
             </div>
             <div class="card-body">
-                <p>Below is a visualization of the projected cutoffs for top programs at BITS campuses for 2025:</p>
+                <p>Below is a visualization of the cutoffs for top programs at BITS campuses for 2024:</p>
                 <div class="chart-container">
                     <canvas id="cutoffChart"></canvas>
                 </div>
@@ -124,46 +141,104 @@
         document.addEventListener('DOMContentLoaded', function() {
             const ctx = document.getElementById('cutoffChart').getContext('2d');
             
+            // X-axis scores range - from 200 to 330
+            const scoreRange = Array.from({length: 14}, (_, i) => 200 + (i * 10));
+            
+            // 2024 cutoffs for top programs
+            const pilaniCS = 327;
+            const pilaniMathComp = 318;
+            const pilaniECE = 315;
+            const goaCS = 300;
+            const goaMathComp = 292;
+            const hyderabadCS = 298;
+            
+            // Create data points for line graph
+            // Each line will show which programs are available at each score
+            const data = scoreRange.map(score => {
+                return {
+                    x: score,
+                    pilaniCS: score >= pilaniCS ? 1 : null,
+                    pilaniMathComp: score >= pilaniMathComp ? 1 : null,
+                    pilaniECE: score >= pilaniECE ? 1 : null,
+                    goaCS: score >= goaCS ? 1 : null,
+                    goaMathComp: score >= goaMathComp ? 1 : null,
+                    hyderabadCS: score >= hyderabadCS ? 1 : null
+                };
+            });
+            
             const chart = new Chart(ctx, {
-                type: 'bar',
+                type: 'line',
                 data: {
-                    labels: [
-                        'CS (Pilani)', 
-                        'Math & Computing (Pilani)', 
-                        'ECE (Pilani)', 
-                        'CS (Goa)', 
-                        'Math & Computing (Goa)', 
-                        'CS (Hyderabad)'
-                    ],
-                    datasets: [{
-                        label: '2025 Projected Cutoffs',
-                        data: [330, 322, 320, 305, 300, 302],
-                        backgroundColor: [
-                            'rgba(233, 69, 96, 0.8)',
-                            'rgba(71, 125, 241, 0.8)',
-                            'rgba(118, 74, 241, 0.8)',
-                            'rgba(45, 211, 111, 0.8)',
-                            'rgba(240, 152, 25, 0.8)',
-                            'rgba(26, 188, 254, 0.8)'
-                        ],
-                        borderColor: [
-                            'rgba(233, 69, 96, 1)',
-                            'rgba(71, 125, 241, 1)',
-                            'rgba(118, 74, 241, 1)',
-                            'rgba(45, 211, 111, 1)',
-                            'rgba(240, 152, 25, 1)',
-                            'rgba(26, 188, 254, 1)'
-                        ],
-                        borderWidth: 1
-                    }]
+                    labels: scoreRange,
+                    datasets: [
+                        {
+                            label: 'CS (Pilani) - 327',
+                            data: scoreRange.map(score => score >= pilaniCS ? pilaniCS : null),
+                            borderColor: 'rgba(233, 69, 96, 1)',
+                            backgroundColor: 'rgba(233, 69, 96, 0.2)',
+                            tension: 0.1,
+                            pointRadius: 4,
+                            fill: false
+                        },
+                        {
+                            label: 'Math & Computing (Pilani) - 318',
+                            data: scoreRange.map(score => score >= pilaniMathComp ? pilaniMathComp : null),
+                            borderColor: 'rgba(71, 125, 241, 1)',
+                            backgroundColor: 'rgba(71, 125, 241, 0.2)',
+                            tension: 0.1,
+                            pointRadius: 4,
+                            fill: false
+                        },
+                        {
+                            label: 'ECE (Pilani) - 315',
+                            data: scoreRange.map(score => score >= pilaniECE ? pilaniECE : null),
+                            borderColor: 'rgba(118, 74, 241, 1)',
+                            backgroundColor: 'rgba(118, 74, 241, 0.2)',
+                            tension: 0.1,
+                            pointRadius: 4,
+                            fill: false
+                        },
+                        {
+                            label: 'CS (Goa) - 300',
+                            data: scoreRange.map(score => score >= goaCS ? goaCS : null),
+                            borderColor: 'rgba(45, 211, 111, 1)',
+                            backgroundColor: 'rgba(45, 211, 111, 0.2)',
+                            tension: 0.1,
+                            pointRadius: 4,
+                            fill: false
+                        },
+                        {
+                            label: 'Math & Computing (Goa) - 292',
+                            data: scoreRange.map(score => score >= goaMathComp ? goaMathComp : null),
+                            borderColor: 'rgba(240, 152, 25, 1)',
+                            backgroundColor: 'rgba(240, 152, 25, 0.2)',
+                            tension: 0.1,
+                            pointRadius: 4,
+                            fill: false
+                        },
+                        {
+                            label: 'CS (Hyderabad) - 298',
+                            data: scoreRange.map(score => score >= hyderabadCS ? hyderabadCS : null),
+                            borderColor: 'rgba(26, 188, 254, 1)',
+                            backgroundColor: 'rgba(26, 188, 254, 0.2)',
+                            tension: 0.1,
+                            pointRadius: 4,
+                            fill: false
+                        }
+                    ]
                 },
                 options: {
                     responsive: true,
                     maintainAspectRatio: false,
                     scales: {
                         y: {
+                            title: {
+                                display: true,
+                                text: 'Cutoff Score',
+                                color: 'rgba(255, 255, 255, 0.8)'
+                            },
                             beginAtZero: false,
-                            min: 250,
+                            min: 200,
                             max: 350,
                             grid: {
                                 color: 'rgba(255, 255, 255, 0.1)'
@@ -173,6 +248,11 @@
                             }
                         },
                         x: {
+                            title: {
+                                display: true,
+                                text: 'BITSAT Score',
+                                color: 'rgba(255, 255, 255, 0.8)'
+                            },
                             grid: {
                                 color: 'rgba(255, 255, 255, 0.1)'
                             },
@@ -182,12 +262,26 @@
                         }
                     },
                     plugins: {
+                        title: {
+                            display: true,
+                            text: '2024 BITSAT Cutoff Scores',
+                            color: 'rgba(255, 255, 255, 0.9)',
+                            font: {
+                                size: 16,
+                                weight: 'bold'
+                            },
+                            padding: {
+                                bottom: 20
+                            }
+                        },
                         legend: {
+                            position: 'bottom',
                             labels: {
                                 color: 'rgba(255, 255, 255, 0.8)',
                                 font: {
-                                    size: 14
-                                }
+                                    size: 12
+                                },
+                                padding: 15
                             }
                         },
                         tooltip: {
@@ -195,13 +289,18 @@
                             titleColor: '#fff',
                             bodyColor: '#fff',
                             titleFont: {
-                                size: 16
-                            },
-                            bodyFont: {
                                 size: 14
                             },
-                            padding: 12,
-                            cornerRadius: 8
+                            bodyFont: {
+                                size: 13
+                            },
+                            padding: 10,
+                            cornerRadius: 6,
+                            callbacks: {
+                                label: function(context) {
+                                    return `Cutoff: ${context.raw}`;
+                                }
+                            }
                         }
                     }
                 }
