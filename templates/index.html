@@ -141,7 +141,7 @@
 </head>
 <body>
     <div class="container py-5">
-        <h1 class="text-center mb-4">🚀 BITSAT 2025 Predictor</h1>
+        <h1 class="text-center mb-4">🚀 BITSAT 2024 Branch Predictor</h1>
         <p class="text-center mb-4"><a href="/about" style="color: #e94560; text-decoration: none;">Learn how we calculate predictions →</a></p>
         
         <div class="row justify-content-center">
@@ -153,15 +153,10 @@
                                 <label for="score" class="form-label">Enter your BITSAT score:</label>
                                 <input type="number" class="form-control" id="score" required min="0" max="400">
                             </div>
-                            <div class="mb-4">
-                                <div class="form-check">
-                                    <input class="form-check-input" type="checkbox" id="bonus">
-                                    <label class="form-check-label" for="bonus">
-                                        Attempted bonus questions
-                                    </label>
-                                </div>
+                            <div class="mb-2">
+                                <p class="text-muted">Enter your score to see eligible branches based on 2024 cutoffs</p>
                             </div>
-                            <button type="submit" class="btn btn-primary w-100">Predict My Future! 🎯</button>
+                            <button type="submit" class="btn btn-primary w-100">Find My Eligible Branches! 🎯</button>
                         </form>
                     </div>
                 </div>
@@ -170,16 +165,9 @@
 
         <div id="results" class="mt-5" style="display: none;">
             <h3 class="text-center mb-4">Your Results 🎉</h3>
-            <div class="row justify-content-center">
-                <div class="col-md-6">
-                    <div class="alert alert-info">
-                        <h4 class="text-center mb-0">Predicted Rank: <span id="predictedRank" style="color: #e94560; font-weight: bold;"></span></h4>
-                    </div>
-                </div>
-            </div>
             
-            <div class="mt-4">
-                <h4 class="text-center mb-4">Your Eligible Branches 📚</h4>
+            <div>
+                <h4 class="text-center mb-4">Eligible Branches Based on 2024 Cutoffs 📚</h4>
                 <div class="row" id="campusList"></div>
             </div>
         </div>
@@ -191,7 +179,6 @@
                    e.preventDefault();
 
                    const scoreInput = document.getElementById('score');
-                   const bonus = document.getElementById('bonus').checked;
 
                    // Client-side validation
                    if (!scoreInput.checkValidity()) {
@@ -207,13 +194,10 @@
                            headers: {
                                'Content-Type': 'application/json',
                            },
-                           body: JSON.stringify({ score, bonus })
+                           body: JSON.stringify({ score })
                        });
 
                        const data = await response.json();
-
-                       // Show predicted rank
-                       document.getElementById('predictedRank').textContent = data.rank;
 
                        // Populate campus list
                        const campusList = document.getElementById('campusList');
@@ -250,7 +234,7 @@
                                                    <li class="branch-item">
                                                        <strong>${branch.branch}</strong>
                                                        <br>
-                                                       <small class="text-muted">Cutoff: ${branch.cutoff}</small>
+                                                       <small class="text-muted">2024 Cutoff: ${branch.cutoff}</small>
                                                    </li>
                                                `).join('')}
                                            </ul>
