@@ -107,20 +107,22 @@
         }
         .nav-container {
             display: flex;
-            justify-content: center;
             align-items: center;
             width: 100%;
-            position: relative;
         }
-        .title-placeholder {
-            width: 40px;
+        .nav-home {
+            margin-right: 20px;
+            position: relative;
+            flex: 0 0 auto;
         }
         .main-title {
             text-align: center;
-            margin: 0;
+            margin: 0 auto;
             font-size: 1.2rem;
             color: #e94560;
             font-weight: 600;
+            flex: 1 1 auto;
+            padding-right: 60px; /* Balance the navbar */
         }
     </style>
 </head>
@@ -129,7 +131,6 @@
         <div class="container nav-container">
             <a href="/" class="nav-home">Home</a>
             <div class="main-title">ABOUT BITSAT BRANCH PREDICTOR</div>
-            <div style="width: 80px;"></div> <!-- This creates balance with the Home button -->
         </div>
     </nav>
 
