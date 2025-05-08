@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -5,6 +6,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>About BITSAT Branch Predictor</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <style>
         body {
             background: #1a1a2e;
@@ -58,6 +60,13 @@
             font-family: monospace;
             font-size: 0.9em;
         }
+        .chart-container {
+            position: relative;
+            margin: auto;
+            height: 400px;
+            width: 100%;
+            padding: 20px;
+        }
     </style>
 </head>
 <body>
@@ -75,8 +84,8 @@
                 Branch Cutoffs
             </div>
             <div class="card-body">
-                <p>The branch cutoffs displayed in this predictor are based on the 2024 BITSAT admission data. These cutoffs represent the minimum score required to be eligible for each branch at respective campuses.</p>
-                <p>Note that these are the actual cutoffs from 2024, and they may vary in future years based on:</p>
+                <p>The branch cutoffs displayed in this predictor are based on the 2024 BITSAT admission data, with projections for 2025. These cutoffs represent the minimum score required to be eligible for each branch at respective campuses.</p>
+                <p>Note that these projections for 2025 are estimates based on past trends and may vary due to:</p>
                 <ul>
                     <li>Number of applicants</li>
                     <li>Overall performance of test-takers</li>
@@ -85,18 +94,119 @@
             </div>
         </div>
 
+        <div class="card mb-4">
+            <div class="card-header">
+                2025 Cutoff Projections
+            </div>
+            <div class="card-body">
+                <p>Below is a visualization of the projected cutoffs for top programs at BITS campuses for 2025:</p>
+                <div class="chart-container">
+                    <canvas id="cutoffChart"></canvas>
+                </div>
+            </div>
+        </div>
+
         <div class="card">
             <div class="card-header">
                 How to Use the Predictor
             </div>
             <div class="card-body">
-                <p>Simply enter your BITSAT score in the input field on the home page and click the "Find My Eligible Branches" button. The predictor will display all branches across all three BITS campuses (Pilani, Goa, and Hyderabad) for which you would have been eligible based on the 2024 cutoffs.</p>
+                <p>Simply enter your BITSAT score in the input field on the home page and click the "Find My Eligible Branches" button. The predictor will display all branches across all three BITS campuses (Pilani, Goa, and Hyderabad) for which you would be eligible based on the cutoff scores.</p>
 
                 <p>The branches are sorted by cutoff score, with the most competitive branches (highest cutoffs) appearing first.</p>
 
-                <p class="mt-3"><strong>Important Note:</strong> This predictor is meant to be used as a guidance tool based on historical data. The actual cutoffs for future years may vary from the 2024 values shown here.</p>
+                <p class="mt-3"><strong>Important Note:</strong> This predictor is meant to be used as a guidance tool based on historical data and projections. The actual cutoffs for 2025 may vary from the estimated values shown here.</p>
             </div>
         </div>
     </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const ctx = document.getElementById('cutoffChart').getContext('2d');
+            
+            const chart = new Chart(ctx, {
+                type: 'bar',
+                data: {
+                    labels: [
+                        'CS (Pilani)', 
+                        'Math & Computing (Pilani)', 
+                        'ECE (Pilani)', 
+                        'CS (Goa)', 
+                        'Math & Computing (Goa)', 
+                        'CS (Hyderabad)'
+                    ],
+                    datasets: [{
+                        label: '2025 Projected Cutoffs',
+                        data: [330, 322, 320, 305, 300, 302],
+                        backgroundColor: [
+                            'rgba(233, 69, 96, 0.8)',
+                            'rgba(71, 125, 241, 0.8)',
+                            'rgba(118, 74, 241, 0.8)',
+                            'rgba(45, 211, 111, 0.8)',
+                            'rgba(240, 152, 25, 0.8)',
+                            'rgba(26, 188, 254, 0.8)'
+                        ],
+                        borderColor: [
+                            'rgba(233, 69, 96, 1)',
+                            'rgba(71, 125, 241, 1)',
+                            'rgba(118, 74, 241, 1)',
+                            'rgba(45, 211, 111, 1)',
+                            'rgba(240, 152, 25, 1)',
+                            'rgba(26, 188, 254, 1)'
+                        ],
+                        borderWidth: 1
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    scales: {
+                        y: {
+                            beginAtZero: false,
+                            min: 250,
+                            max: 350,
+                            grid: {
+                                color: 'rgba(255, 255, 255, 0.1)'
+                            },
+                            ticks: {
+                                color: 'rgba(255, 255, 255, 0.7)'
+                            }
+                        },
+                        x: {
+                            grid: {
+                                color: 'rgba(255, 255, 255, 0.1)'
+                            },
+                            ticks: {
+                                color: 'rgba(255, 255, 255, 0.7)'
+                            }
+                        }
+                    },
+                    plugins: {
+                        legend: {
+                            labels: {
+                                color: 'rgba(255, 255, 255, 0.8)',
+                                font: {
+                                    size: 14
+                                }
+                            }
+                        },
+                        tooltip: {
+                            backgroundColor: 'rgba(15, 52, 96, 0.9)',
+                            titleColor: '#fff',
+                            bodyColor: '#fff',
+                            titleFont: {
+                                size: 16
+                            },
+                            bodyFont: {
+                                size: 14
+                            },
+                            padding: 12,
+                            cornerRadius: 8
+                        }
+                    }
+                }
+            });
+        });
+    </script>
 </body>
 </html>
