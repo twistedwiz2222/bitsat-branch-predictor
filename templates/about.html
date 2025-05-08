@@ -17,9 +17,6 @@
             max-width: 1000px;
             padding-top: 80px;
         }
-        .content-container {
-            padding-top: 20px;
-        }
         .card {
             background: #16213e;
             border: none;
@@ -107,33 +104,25 @@
         }
         .nav-container {
             display: flex;
-            justify-content: center;
+            justify-content: space-between;
             align-items: center;
             width: 100%;
-            position: relative;
         }
         .title-placeholder {
             width: 40px;
-        }
-        .main-title {
-            text-align: center;
-            margin: 0;
-            font-size: 1.2rem;
-            color: #e94560;
-            font-weight: 600;
         }
     </style>
 </head>
 <body>
     <nav class="navbar">
         <div class="container nav-container">
+            <div class="title-placeholder"></div>
             <a href="/" class="nav-home">Home</a>
-            <div class="main-title">ABOUT BITSAT BRANCH PREDICTOR</div>
-            <div style="width: 80px;"></div> <!-- This creates balance with the Home button -->
         </div>
     </nav>
 
-    <div class="container content-container">
+    <div class="container">
+        <h1>About BITSAT Branch Predictor</h1>
 
         <div class="card mb-4">
             <div class="card-header">
