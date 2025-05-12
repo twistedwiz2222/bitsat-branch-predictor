@@ -2,13 +2,27 @@ from flask import Flask, render_template, jsonify, request, send_from_directory
 
 app = Flask(__name__)
 
-# ... your existing functions and routes ...
-
+# --- Google Search Console verification route ---
 @app.route('/google5d010b73fa84d4a0.html')
 def google_verification():
     return send_from_directory('.', 'google5d010b73fa84d4a0.html')
 
-# ... rest of your code ...
+# --- Sitemap route for Google Search Console ---
+@app.route('/sitemap.xml')
+def sitemap():
+    return send_from_directory('.', 'sitemap.xml')
+
+# --- Your other routes and functions below ---
+def get_eligible_branches(score):
+    branches = [
+        # ... your branch data ...
+    ]
+    # ... rest of your function ...
+
+# ... other routes and logic ...
+
+if __name__ == '__main__':
+    app.run(debug=True)
 
 
 def get_eligible_branches(score):
