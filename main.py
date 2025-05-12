@@ -1,6 +1,14 @@
-from flask import Flask, render_template, jsonify, request
+from flask import Flask, render_template, jsonify, request, send_from_directory
 
 app = Flask(__name__)
+
+# ... your existing functions and routes ...
+
+@app.route('/google5d010b73fa84d4a0.html')
+def google_verification():
+    return send_from_directory('.', 'google5d010b73fa84d4a0.html')
+
+# ... rest of your code ...
 
 
 def get_eligible_branches(score):
